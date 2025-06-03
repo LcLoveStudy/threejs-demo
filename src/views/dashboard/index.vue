@@ -1,0 +1,20 @@
+<template>
+  <div class="mt-8">
+    <!-- 过滤栏 -->
+    <div class="flex justify-end px-8">
+      <search-input v-model="searchValue" />
+    </div>
+    <!-- 示例列表 -->
+    <div class="grid grid-cols-4 grid-rows-4 gap-4 h-[50vh] overflow-y-auto p-8">
+      <example-box v-for="item in exampleList" :key="item.name" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { SearchInput, ExampleBox } from './components'
+import type { ExampleItemType } from '@/types/dashboard'
+const searchValue = ref('') // 搜索值
+const exampleList = ref<ExampleItemType[]>([]) // 示例列表
+</script>

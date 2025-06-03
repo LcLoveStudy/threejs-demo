@@ -1,1 +1,5 @@
 @import 'tailwindcss';
+
+@theme {
+  --shadow-white-round: 0px 0px 10px #fff;
+}
