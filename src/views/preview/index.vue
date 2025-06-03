@@ -2,4 +2,6 @@
   <div></div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import * as THREE from 'three'
+</script>
