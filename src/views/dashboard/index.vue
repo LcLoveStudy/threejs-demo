@@ -5,8 +5,8 @@
       <search-input v-model="searchValue" />
     </div>
     <!-- 示例列表 -->
-    <div class="grid grid-cols-4 grid-rows-4 gap-4 h-[50vh] overflow-y-auto p-8">
-      <example-box v-for="item in exampleList" :key="item.name" />
+    <div class="grid grid-cols-4 gap-4 h-[80vh] overflow-y-auto p-8">
+      <example-box v-for="item in exampleList" :key="item.name" :example-info="item" />
     </div>
   </div>
 </template>
@@ -16,5 +16,12 @@ import { ref } from 'vue'
 import { SearchInput, ExampleBox } from './components'
 import type { ExampleItemType } from '@/types/dashboard'
 const searchValue = ref('') // 搜索值
-const exampleList = ref<ExampleItemType[]>([]) // 示例列表
+// 示例列表
+const exampleList = ref<ExampleItemType[]>([
+  {
+    name: '太阳系模型',
+    img: '',
+    description: '使用three.js 实现的太阳系模型',
+  },
+])
 </script>

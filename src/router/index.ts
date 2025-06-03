@@ -5,8 +5,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Layout',
+      name: 'dashboard',
       component: () => import('@/views/dashboard/index.vue'),
+    },
+    {
+      path: '/preview',
+      name: 'preview',
+      component: () => import('@/views/preview/index.vue'),
     },
   ],
 })
