@@ -14,14 +14,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { SearchInput, ExampleBox } from './components'
-import type { ExampleItemType } from '@/types/dashboard'
+import { ExampleNameEnum, type ExampleItemType } from '@/types/dashboard'
 const searchValue = ref('') // 搜索值
 // 示例列表
 const exampleList = ref<ExampleItemType[]>([
   {
-    name: '太阳系模型',
+    id: 'solarSystem',
+    name: ExampleNameEnum.solarSystem,
     img: '',
     description: '使用three.js 实现的太阳系模型',
+  },
+  {
+    id: 'baseBox',
+    name: ExampleNameEnum.baseBox,
+    img: '',
+    description: '一个简单的立方体',
   },
 ])
 </script>

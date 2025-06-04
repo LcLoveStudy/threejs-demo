@@ -34,7 +34,7 @@ const toPreviewPage = () => {
   router.push({
     path: '/preview',
     query: {
-      name: exampleInfo.name,
+      id: exampleInfo.id,
     },
   })
 }
