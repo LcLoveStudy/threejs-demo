@@ -4,55 +4,64 @@ import { getBaseUtils, resetRenderer } from './common'
 /** 创建一个太阳系 */
 export const solarSystem = (canvasDom: HTMLCanvasElement) => {
   const { scene, camera, renderer } = getBaseUtils(canvasDom)
-  const objects: Array<THREE.Mesh | THREE.Object3D> = [] //需要更新旋转角度的对象数组
+  scene.background = new THREE.Color('gray')
 
-  const solarSystem = new THREE.Object3D()
-  scene.add(solarSystem)
-  objects.push(solarSystem)
+  // 自转的列表
+  const rotateList: Array<THREE.Mesh | THREE.Object3D> = []
 
-  const sphereGeometry = new THREE.SphereGeometry(1, 6, 6) //球体几何体
+  const geometry = new THREE.SphereGeometry(2, 32, 32) // 球体
 
-  const sunMaterial = new THREE.MeshPhongMaterial({ emissive: 0xffff00 }) //太阳材质
-  const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial) //太阳
-  sunMesh.scale.set(5, 5, 5) //设置太阳大小
-  solarSystem.add(sunMesh)
-  objects.push(sunMesh) //将太阳添加到需要更新旋转角度的对象数组中
+  const solarOrbit = new THREE.Object3D()
+  rotateList.push(solarOrbit)
+  scene.add(solarOrbit)
 
-  const color = 0xffffff
-  const intensity = 3
-  const light = new THREE.PointLight(color, intensity)
-  scene.add(light)
+  // 太阳
+  const sunMaterial = new THREE.MeshStandardMaterial({ color: 'white', emissive: 'yellow' })
+  const sun = new THREE.Mesh(geometry, sunMaterial)
+  rotateList.push(sun)
+  solarOrbit.add(sun)
 
-  const earthSystem = new THREE.Object3D()
-  earthSystem.position.x = 10
-  solarSystem.add(earthSystem)
-  objects.push(earthSystem) //将地球系统添加到太阳系中
-
-  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x2233ff, emissive: 0x112244 }) //地球材质
-  const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial) //地球
-  objects.push(earthMesh) //将地球添加到需要更新旋转角度的对象数组中
-  earthSystem.add(earthMesh) //将地球系统添加到地球中
+  const earthOrbit = new THREE.Object3D()
+  earthOrbit.position.set(10, 0, 0)
+  solarOrbit.add(earthOrbit)
+  rotateList.push(earthOrbit)
+  // 地球
+  const earthMaterial = new THREE.MeshPhongMaterial({ color: 'blue' })
+  const earth = new THREE.Mesh(geometry, earthMaterial)
+  earth.scale.set(0.5, 0.5, 0.5)
+  rotateList.push(earth)
+  earthOrbit.add(earth)
 
   const moonOrbit = new THREE.Object3D()
-  moonOrbit.position.x = 2
-  earthSystem.add(moonOrbit)
+  moonOrbit.position.set(2, 0, 0)
+  earthOrbit.add(moonOrbit)
+  rotateList.push(moonOrbit)
+  // 月球
+  const moonMaterial = new THREE.MeshPhongMaterial({ color: 'gray' })
+  const moon = new THREE.Mesh(geometry, moonMaterial)
+  moon.scale.set(0.2, 0.2, 0.2)
+  rotateList.push(moon)
+  moonOrbit.add(moon)
 
-  const moonMaterial = new THREE.MeshPhongMaterial({ color: 0x999999, emissive: 0x111111 }) //月球材质
-  const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial) //月球
-  moonMesh.scale.set(0.5, 0.5, 0.5)
-  moonOrbit.add(moonMesh) //将月球系统添加到月球中
-  objects.push(moonMesh) //将地球添加到需要更新旋转角度的对象数组中
+  // 太阳光
+  const sunlight = new THREE.DirectionalLight(0xffffff, 1)
+  sunlight.position.set(50, 20, 0)
+  scene.add(sunlight)
 
-  camera.position.set(0, 50, 0)
-  camera.up.set(0, 0, 1)
-  camera.lookAt(0, 0, 0)
+  // 环境光，防止黑色
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3) // 第二个参数是强度
+  scene.add(ambientLight)
 
-  const animate = (time: number) => {
+  // 自转
+  const animate = () => {
     requestAnimationFrame(animate)
-    renderer.render(scene, camera) // 渲染画面
-    objects.forEach((obj) => {
-      obj.rotation.y = time * 0.001 // 更新对象的旋转角度
+    rotateList.forEach((item) => {
+      item.rotation.y += 0.01
     })
+    sunlight.position.copy(sun.getWorldPosition(new THREE.Vector3()))
+    sunlight.target.position.copy(earth.getWorldPosition(new THREE.Vector3()))
+    sunlight.target.updateMatrixWorld()
+    renderer.render(scene, camera)
   }
   requestAnimationFrame(animate)
 
