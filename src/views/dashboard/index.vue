@@ -25,8 +25,8 @@ const exampleList = ref<ExampleItemType[]>([
     description: '使用three.js 实现的太阳系模型',
   },
   {
-    id: 'baseBox',
-    name: ExampleNameEnum.baseBox,
+    id: 'baseCube',
+    name: ExampleNameEnum.baseCube,
     img: '',
     description: '一个简单的立方体',
   },

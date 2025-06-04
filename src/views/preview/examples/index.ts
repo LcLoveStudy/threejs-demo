@@ -9,7 +9,7 @@ export const initialExamples = (canvasDom: HTMLCanvasElement | null, exampleId: 
     case 'solarSystem':
       solarSystem(canvasDom)
       break
-    case 'baseBox':
+    case 'baseCube':
       baseBox(canvasDom)
       break
     default:
