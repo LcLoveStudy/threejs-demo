@@ -1,6 +1,5 @@
 import * as THREE from 'three'
-import { getBaseUtils } from './common'
-import { onUnmounted } from 'vue'
+import { getBaseUtils, resetRenderer } from './common'
 
 /** 创建一个太阳系 */
 export const solarSystem = (canvasDom: HTMLCanvasElement) => {
@@ -49,16 +48,5 @@ export const solarSystem = (canvasDom: HTMLCanvasElement) => {
   animate()
 
   /** 响应式 */
-  const resizeDom = () => {
-    const width = window.innerWidth
-    const height = window.innerHeight - 64
-    renderer.setSize(width, height)
-    camera.aspect = width / height
-    camera.updateProjectionMatrix()
-  }
-  resizeDom()
-  window.addEventListener('resize', resizeDom)
-  onUnmounted(() => {
-    window.removeEventListener('resize', resizeDom)
-  })
+  resetRenderer(renderer, camera)
 }

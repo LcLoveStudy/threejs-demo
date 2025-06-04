@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import { onUnmounted } from 'vue'
 /**
  * 初始化场景和相机
  * @param canvasDom canvas元素
@@ -11,7 +12,7 @@ export const getBaseUtils = (canvasDom: HTMLCanvasElement) => {
   //初始化相机
   const camera = new THREE.PerspectiveCamera(
     75, // 视场角
-    window.innerWidth / window.innerHeight - 64, //长宽比
+    canvasDom.clientWidth / canvasDom.clientHeight, //长宽比
     0.1, //近截面
     1000, //远截面
   )
@@ -30,4 +31,25 @@ export const getBaseUtils = (canvasDom: HTMLCanvasElement) => {
   controls.enableDamping = true
 
   return { scene, camera, renderer, controls }
+}
+
+/**
+ * 渲染器根据动画碎片大小重置
+ * @param {THREE.WebGLRenderer} renderer  渲染器
+ * @param {THREE.PerspectiveCamera} camera 透视相机
+ */
+export const resetRenderer = (renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera) => {
+  /** 响应式 */
+  const resizeDom = () => {
+    const width = window.innerWidth
+    const height = window.innerHeight - 64
+    renderer.setSize(width, height)
+    camera.aspect = width / height
+    camera.updateProjectionMatrix()
+  }
+  resizeDom()
+  window.addEventListener('resize', resizeDom)
+  onUnmounted(() => {
+    window.removeEventListener('resize', resizeDom)
+  })
 }
